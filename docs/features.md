@@ -18,7 +18,7 @@ Slicing notes:
 
 ### PR1: Project scaffold
 - Branch: feat/pr1-scaffold
-- Status: todo
+- Status: done
 - Goal: Empty Vite react-ts app with Vitest + RTL + jest-dom and a passing smoke test; no todo features.
 - ACs: none
 - Files:

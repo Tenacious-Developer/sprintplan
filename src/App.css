@@ -1,0 +1,5 @@
+/* Dark theme and layout arrive with the first feature (PR2). */
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+}
