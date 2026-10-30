@@ -1,6 +1,6 @@
 ---
 name: next-feature
-description: Starts the next PR from docs/features.md - picks it, branches, plans, then builds it test-first after approval.
+description: Starts the next build step (PRn) from docs/features.md - picks it, branches, plans, builds it test-first after approval, then tests it with pr-tester.
 disable-model-invocation: true
 argument-hint: "[PRn]"
 ---
@@ -9,10 +9,10 @@ argument-hint: "[PRn]"
 
 1. **Pick the PR.** If `$ARGUMENTS` names a PR (e.g. `PR3`), use it. Otherwise pick the first PR in
    `docs/features.md` with `Status: todo` whose `Depends on:` PRs all have `Status: done`
-   (on `main`, `done` means merged). If none qualifies, say why and stop.
+   (on `main`, `done` means shipped). If none qualifies, say why and stop.
 2. **Check git.** Must be on `main`, working tree clean (`git status --porcelain` empty), and up to date
    with origin (`git pull`). If any check fails, stop and tell me what is wrong. Do not fix it yourself.
-   Never commit or push feature work to `main`.
+   Don't commit to `main` while building: all work happens on the branch.
 3. **Branch.** `git switch -c <Branch from the PR section>`.
 4. **Read.** That PR's section in `docs/features.md`, each of its ACs in `docs/spec.md`, and the parts of
    `docs/arch.md` it touches (modules, data model, testing approach). Follow `CLAUDE.md` code rules.
@@ -26,12 +26,12 @@ argument-hint: "[PRn]"
 6. **Build (after approval).**
    - Write the tests, run `npm test`, and show that the new ones fail.
    - Implement until `npm test` passes fully.
-   - Set that PR's `Status:` to `done` in `docs/features.md`, on this branch, so it lands on `main` with the merge.
+   - Set that PR's `Status:` to `done` in `docs/features.md`, on this branch, so it lands on `main` when shipped.
 7. **Test.** Use the `pr-tester` subagent on this PR. Append its report to `docs/test.md`
    (for a re-test, add `### PRn re-test` under the PR's section).
 8. **If NOT READY:** fix only the failed checks, then run `pr-tester` again on them. At most 2 fix rounds;
    if still failing, stop and show me. If a check is BLOCKED (command denied), don't work around it:
    tell me exactly what I need to do.
 9. **Stop before committing.** Summarise: changed files, ACs covered (each AC id → test name), the test
-   verdict, and the manual checks for me. Do not commit, push or open a PR: shipping is a separate step
-   (branch → PR → merge).
+   verdict, and the manual checks for me. Do not commit or push. Shipping happens only when I ask:
+   squash-merge into `main` and push, as described in `CLAUDE.md`. No GitHub pull requests.

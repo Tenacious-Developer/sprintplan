@@ -1,12 +1,15 @@
 # Build plan: Todo Web App (v1)
 
-Small PRs, in order. Source: [spec.md](spec.md) (ACs), [arch.md](arch.md) (how).
+Small steps, in order. Source: [spec.md](spec.md) (ACs), [arch.md](arch.md) (how).
 
-- Feature work reaches `main` only through a merged PR: one branch `feat/prN-short-name` each (below).
+`PRn` is the id of one build step. There are no GitHub pull requests.
+
+- Each step is built and tested on a local branch `feat/prN-short-name`.
+- When its test verdict is READY TO SHIP, it is squash-merged into `main` as one commit and pushed.
 - Docs and setup changes may be pushed to `main` directly, by me.
-- Each feature PR: `npm test` green before every commit, AC ids in test names and the PR description, main working after merge.
+- Each step: `npm test` green before every commit, AC ids in test names and in the ship commit, and `main` working after every push.
 
-Status is `todo` or `done`. A PR sets its own `Status: done` in this file as part of the PR, so on `main`, `done` means merged.
+Status is `todo` or `done`. A step sets its own `Status: done` on its branch, so on `main`, `done` means shipped.
 
 Slicing notes:
 

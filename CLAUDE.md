@@ -13,10 +13,11 @@ docs/ is the source of truth: intent.md (why), spec.md (what, with AC ids), arch
 
 ## Workflow
 
-- One feature = one branch `feat/prN-short-name` = one PR. Never commit or push feature work to `main`.
-- Docs and setup changes may go straight to `main`, but only when I do it or ask for it explicitly.
+- No GitHub pull requests. One feature (`PRn` in docs/features.md) = one local branch `feat/prN-short-name` while building and testing.
+- Ship a feature only when I ask, after the test verdict is READY TO SHIP: `git switch main && git pull`, `git merge --squash feat/prN-...`, commit as `feat(prN): <title>` (list the AC ids in the body), run `npm test` on main, `git push`, then delete the branch.
+- Docs and setup changes may go straight to `main` when I do it or ask for it.
 - Run `npm test` before every commit.
-- Put AC ids in test names (e.g. `AC4.3 cancel keeps todo`) and in PR descriptions.
+- Put AC ids in test names (e.g. `AC4.3 cancel keeps todo`).
 
 ## Code rules
 
