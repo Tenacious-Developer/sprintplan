@@ -1,8 +1,12 @@
 # Build plan: Todo Web App (v1)
 
 Small PRs, in order. Source: [spec.md](spec.md) (ACs), [arch.md](arch.md) (how).
-Each PR: one branch `feat/prN-short-name`, `npm test` green before every commit,
-AC ids in test names and the PR description, main working after merge.
+
+- Feature work reaches `main` only through a merged PR: one branch `feat/prN-short-name` each (below).
+- Docs and setup changes may be pushed to `main` directly, by me.
+- Each feature PR: `npm test` green before every commit, AC ids in test names and the PR description, main working after merge.
+
+Status is `todo` or `done`. A PR sets its own `Status: done` in this file as part of the PR, so on `main`, `done` means merged.
 
 Slicing notes:
 

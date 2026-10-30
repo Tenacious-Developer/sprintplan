@@ -13,7 +13,8 @@ docs/ is the source of truth: intent.md (why), spec.md (what, with AC ids), arch
 
 ## Workflow
 
-- One feature = one branch `feat/prN-short-name` = one PR. Never commit to `main`.
+- One feature = one branch `feat/prN-short-name` = one PR. Never commit or push feature work to `main`.
+- Docs and setup changes may go straight to `main`, but only when I do it or ask for it explicitly.
 - Run `npm test` before every commit.
 - Put AC ids in test names (e.g. `AC4.3 cancel keeps todo`) and in PR descriptions.
 
