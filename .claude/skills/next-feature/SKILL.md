@@ -27,6 +27,11 @@ argument-hint: "[PRn]"
    - Write the tests, run `npm test`, and show that the new ones fail.
    - Implement until `npm test` passes fully.
    - Set that PR's `Status:` to `done` in `docs/features.md`, on this branch, so it lands on `main` with the merge.
-7. **Stop before committing.** Summarise the changed files and the ACs covered (each AC id → test name).
-   Remind me of the manual check, if any. Do not commit, push or open a PR: shipping is a separate step
+7. **Test.** Use the `pr-tester` subagent on this PR. Append its report to `docs/test.md`
+   (for a re-test, add `### PRn re-test` under the PR's section).
+8. **If NOT READY:** fix only the failed checks, then run `pr-tester` again on them. At most 2 fix rounds;
+   if still failing, stop and show me. If a check is BLOCKED (command denied), don't work around it:
+   tell me exactly what I need to do.
+9. **Stop before committing.** Summarise: changed files, ACs covered (each AC id → test name), the test
+   verdict, and the manual checks for me. Do not commit, push or open a PR: shipping is a separate step
    (branch → PR → merge).
