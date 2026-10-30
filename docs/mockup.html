@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Todo App Mockup</title>
+<style>
+  :root {
+    --page: #0b0d12;
+    --card: #161a22;
+    --row: #1c212b;
+    --border: #2a303c;
+    --text: #e5e7eb;
+    --muted: #8b93a3;
+    --accent: #2563eb;
+    --accent-soft: #60a5fa;
+    --danger: #dc2626;
+    --caption: #c7cdd8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 32px 24px 64px;
+    background: var(--page);
+    color: var(--text);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  header.doc { max-width: 1120px; margin: 0 auto 28px; }
+  header.doc h1 { margin: 0 0 4px; font-size: 22px; }
+  header.doc p { margin: 0; color: var(--muted); font-size: 14px; }
+
+  .grid {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+    gap: 36px 32px;
+  }
+  figure { margin: 0; }
+  figcaption { margin-bottom: 10px; color: var(--caption); font-size: 14px; }
+  figcaption b { color: var(--text); }
+  figcaption span { color: var(--muted); }
+
+  /* ---- the app ---- */
+  .app {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    overflow: hidden;
+  }
+  .app h2 { margin: 0 0 14px; font-size: 24px; font-weight: 600; }
+
+  .add { display: flex; gap: 8px; margin-bottom: 16px; }
+  .field {
+    flex: 1;
+    min-width: 0;
+    background: var(--page);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font: inherit;
+  }
+  .field::placeholder { color: var(--muted); }
+  .field.focus { border-color: var(--accent-soft); box-shadow: 0 0 0 3px rgba(37, 99, 235, .35); }
+
+  .btn {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font: inherit;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn.danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+  .btn.small { padding: 4px 10px; font-size: 13px; }
+  .btn.link-danger { color: #f87171; }
+
+  ul.list { list-style: none; margin: 0; padding: 0; }
+  ul.list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 11px 12px;
+    background: var(--row);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .check {
+    flex: none;
+    width: 20px; height: 20px;
+    margin-top: 1px;
+    border: 2px solid var(--muted);
+    border-radius: 5px;
+    display: grid; place-items: center;
+    font-size: 13px; line-height: 1; color: #fff;
+  }
+  .check.on { background: var(--accent); border-color: var(--accent); }
+  .text { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .done .text { color: var(--muted); text-decoration: line-through; }
+  .actions { flex: none; display: flex; gap: 6px; }
+
+  li.editing { border-color: var(--accent-soft); align-items: center; }
+  li.editing .field { padding: 6px 10px; }
+  ul.list li.hint {
+    display: block;
+    background: none;
+    border: 0;
+    padding: 0 0 0 44px;
+    margin: -2px 0 8px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .empty {
+    text-align: center;
+    padding: 34px 12px;
+    color: var(--muted);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+  }
+  .empty strong { display: block; color: var(--text); font-weight: 500; margin-bottom: 2px; }
+
+  .bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .filters { display: flex; gap: 4px; }
+  .filters .btn { border-color: transparent; color: var(--muted); }
+  .filters .btn.on { border-color: var(--accent-soft); color: var(--accent-soft); background: rgba(37, 99, 235, .12); }
+
+  /* ---- in-page confirmation dialog ---- */
+  .backdrop {
+    position: absolute; inset: 0;
+    background: rgba(5, 7, 10, .72);
+    display: grid; place-items: center;
+    padding: 20px;
+  }
+  .dialog {
+    width: 100%;
+    max-width: 340px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, .5);
+  }
+  .dialog h3 { margin: 0 0 6px; font-size: 17px; }
+  .dialog p { margin: 0 0 18px; color: var(--muted); font-size: 14px; overflow-wrap: anywhere; }
+  .dialog p q { color: var(--text); }
+  .dialog .row { display: flex; justify-content: flex-end; gap: 8px; }
+
+  footer.doc { max-width: 1120px; margin: 40px auto 0; color: var(--muted); font-size: 13px; }
+  footer.doc ul { margin: 6px 0 0; padding-left: 18px; }
+</style>
+</head>
+<body>
+
+<header class="doc">
+  <h1>Todo app: UI mockup (v1)</h1>
+  <p>Static picture of the UI for <a href="spec.md" style="color:var(--accent-soft)">spec.md</a>. Nothing here is clickable. Dark theme, blue accent.</p>
+</header>
+
+<main class="grid">
+
+  <!-- 1. Normal list -->
+  <figure>
+    <figcaption><b>1. Normal list</b><span>:4 todos, 2 completed, filter "All". New todos are added at the bottom.</span></figcaption>
+    <div class="app">
+      <h2>Todos</h2>
+      <div class="add">
+        <input class="field" placeholder="What needs doing?" readonly>
+        <button class="btn primary">Add</button>
+      </div>
+      <ul class="list">
+        <li><span class="check"></span><span class="text">Buy milk</span><span class="actions"><button class="btn small">Edit</button><button class="btn small link-danger">Delete</button></span></li>
+        <li class="done"><span class="check on">✓</span><span class="text">Book dentist appointment</span><span class="actions"><button class="btn small">Edit</button><button class="btn small link-danger">Delete</button></span></li>
+        <li class="done"><span class="check on">✓</span><span class="text">Reply to Sam's email</span><span class="actions"><button class="btn small">Edit</button><button class="btn small link-danger">Delete</button></span></li>
+        <li><span class="check"></span><span class="text">Water the plants</span><span class="actions"><button class="btn small">Edit</button><button class="btn small link-danger">Delete</button></span></li>
+      </ul>
+      <div class="bar">
+        <div class="filters"><button class="btn small on">All</button><button class="btn small">Active</button><button class="btn small">Completed</button></div>
+        <button class="btn small">Clear completed</button>
+      </div>
+    </div>
+  </figure>
+
+  <!-- 2. Editing -->
+  <figure>
+    <figcaption><b>2. Editing a todo</b><span>:"Edit" turns the text into an input. Enter or Save saves; Esc or Cancel keeps the old text.</span></figcaption>
+    <div class="app">
+      <h2>Todos</h2>
+      <div class="add">
+        <input class="field" placeholder="What needs doing?" readonly>
+        <button class="btn primary">Add</button>
+      </div>
+      <ul class="list">
+        <li class="editing"><span class="check"></span><input class="field focus" value="Buy oat milk" readonly><span class="actions"><button class="btn small primary">Save</button><button class="btn small">Cancel</button></span></li>
+        <li class="hint">Enter to save · Esc to cancel · blank text is not saved</li>
+        <li class="done"><span class="check on">✓</span><span class="text">Book dentist appointment</span><span class="actions"><button class="btn small">Edit</button><button class="btn small link-danger">Delete</button></span></li>
+        <li class="done"><span class="check on">✓</span><span class="text">Reply to Sam's email</span><span class="actions"><button class="btn small">Edit</button><button class="btn small link-danger">Delete</button></span></li>
+        <li><span class="check"></span><span class="text">Water the plants</span><span class="actions"><button class="btn small">Edit</button><button class="btn small link-danger">Delete</button></span></li>
+      </ul>
+      <div class="bar">
+        <div class="filters"><button class="btn small on">All</button><button class="btn small">Active</button><button class="btn small">Completed</button></div>
+        <button class="btn small">Clear completed</button>
+      </div>
+    </div>
+  </figure>
+
+  <!-- 3. Delete confirmation -->
+  <figure>
+    <figcaption><b>3. Delete confirmation</b><span>:an in-page dialog after clicking Delete on "Water the plants". "Clear completed" uses the same dialog.</span></figcaption>
+    <div class="app">
+      <h2>Todos</h2>
+      <div class="add">
+        <input class="field" placeholder="What needs doing?" readonly>
+        <button class="btn primary">Add</button>
+      </div>
+      <ul class="list">
+        <li><span class="check"></span><span class="text">Buy milk</span><span class="actions"><button class="btn small">Edit</button><button class="btn small link-danger">Delete</button></span></li>
+        <li class="done"><span class="check on">✓</span><span class="text">Book dentist appointment</span><span class="actions"><button class="btn small">Edit</button><button class="btn small link-danger">Delete</button></span></li>
+        <li class="done"><span class="check on">✓</span><span class="text">Reply to Sam's email</span><span class="actions"><button class="btn small">Edit</button><button class="btn small link-danger">Delete</button></span></li>
+        <li><span class="check"></span><span class="text">Water the plants</span><span class="actions"><button class="btn small">Edit</button><button class="btn small link-danger">Delete</button></span></li>
+      </ul>
+      <div class="bar">
+        <div class="filters"><button class="btn small on">All</button><button class="btn small">Active</button><button class="btn small">Completed</button></div>
+        <button class="btn small">Clear completed</button>
+      </div>
+      <div class="backdrop">
+        <div class="dialog" role="dialog" aria-label="Confirm delete">
+          <h3>Delete this todo?</h3>
+          <p><q>Water the plants</q> will be removed. This can't be undone.</p>
+          <div class="row"><button class="btn">Cancel</button><button class="btn danger">Delete</button></div>
+        </div>
+      </div>
+    </div>
+  </figure>
+
+  <!-- 4. Empty state -->
+  <figure>
+    <figcaption><b>4. Empty state</b><span>:no todos yet. "Clear completed" is hidden because nothing is completed.</span></figcaption>
+    <div class="app">
+      <h2>Todos</h2>
+      <div class="add">
+        <input class="field focus" placeholder="What needs doing?" readonly>
+        <button class="btn primary">Add</button>
+      </div>
+      <div class="empty"><strong>No todos yet</strong>Type a task above and press Enter or Add.</div>
+      <div class="bar">
+        <div class="filters"><button class="btn small on">All</button><button class="btn small">Active</button><button class="btn small">Completed</button></div>
+      </div>
+    </div>
+  </figure>
+
+  <!-- 5. Active filter -->
+  <figure>
+    <figcaption><b>5. "Active" filter selected</b><span>:only the 2 not-done todos show. "Clear completed" stays visible because 2 completed todos still exist.</span></figcaption>
+    <div class="app">
+      <h2>Todos</h2>
+      <div class="add">
+        <input class="field" placeholder="What needs doing?" readonly>
+        <button class="btn primary">Add</button>
+      </div>
+      <ul class="list">
+        <li><span class="check"></span><span class="text">Buy milk</span><span class="actions"><button class="btn small">Edit</button><button class="btn small link-danger">Delete</button></span></li>
+        <li><span class="check"></span><span class="text">Water the plants</span><span class="actions"><button class="btn small">Edit</button><button class="btn small link-danger">Delete</button></span></li>
+      </ul>
+      <div class="bar">
+        <div class="filters"><button class="btn small">All</button><button class="btn small on">Active</button><button class="btn small">Completed</button></div>
+        <button class="btn small">Clear completed</button>
+      </div>
+    </div>
+  </figure>
+
+  <!-- 6. Long text -->
+  <figure>
+    <figcaption><b>6. Very long text</b><span>:wraps inside its row, even long unbroken words or links. Buttons stay at the top right.</span></figcaption>
+    <div class="app">
+      <h2>Todos</h2>
+      <div class="add">
+        <input class="field" placeholder="What needs doing?" readonly>
+        <button class="btn primary">Add</button>
+      </div>
+      <ul class="list">
+        <li><span class="check"></span><span class="text">Buy milk</span><span class="actions"><button class="btn small">Edit</button><button class="btn small link-danger">Delete</button></span></li>
+        <li><span class="check"></span><span class="text">Prepare notes for Monday's planning session: review last sprint's open items, check which tickets are still blocked, collect questions for the design review, and read the long thread at https://example.com/a/very/long/link/that/has/no/spaces/at/all/and/must/still/wrap/inside/the/row before the meeting starts</span><span class="actions"><button class="btn small">Edit</button><button class="btn small link-danger">Delete</button></span></li>
+        <li class="done"><span class="check on">✓</span><span class="text">Book dentist appointment</span><span class="actions"><button class="btn small">Edit</button><button class="btn small link-danger">Delete</button></span></li>
+      </ul>
+      <div class="bar">
+        <div class="filters"><button class="btn small on">All</button><button class="btn small">Active</button><button class="btn small">Completed</button></div>
+        <button class="btn small">Clear completed</button>
+      </div>
+    </div>
+  </figure>
+
+</main>
+
+<footer class="doc">
+  Decisions shown here (also in spec.md §6):
+  <ul>
+    <li>New todos go at the bottom. Spaces at the start and end of the text are trimmed.</li>
+    <li>"Clear completed" is hidden when no todo is completed.</li>
+    <li>Edit button to start editing; Enter / Save saves, Esc / Cancel cancels.</li>
+    <li>Delete and Clear completed ask for confirmation in an in-page dialog.</li>
+    <li>Dark theme only, blue accent.</li>
+  </ul>
+</footer>
+
+</body>
+</html>
